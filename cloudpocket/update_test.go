@@ -13,7 +13,7 @@ func TestUpdatePocket(t *testing.T) {
 	defer db.Close()
 	assert.NoError(t, err)
 
-	mock.ExpectPrepare("UPDATE cloudpocket.*").ExpectExec().
+	mock.ExpectPrepare("UPDATE cloud_pockets.*").ExpectExec().
 		WithArgs(1, "name", 100.0, "description").
 		WillReturnResult(driver.RowsAffected(1))
 
