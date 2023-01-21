@@ -10,8 +10,8 @@ import (
 
 func TestUpdatePocket(t *testing.T) {
 	db, mock, err := sqlmock.New()
-	defer db.Close()
 	assert.NoError(t, err)
+	defer db.Close()
 
 	mock.ExpectPrepare("UPDATE cloud_pockets.*").ExpectExec().
 		WithArgs(1, "name", 100.0, "description").
@@ -33,8 +33,8 @@ func TestUpdatePocket(t *testing.T) {
 
 func TestUpdatePocketNotFound(t *testing.T) {
 	db, mock, err := sqlmock.New()
-	defer db.Close()
 	assert.NoError(t, err)
+	defer db.Close()
 
 	mock.ExpectPrepare("UPDATE cloudpocket.*").ExpectExec().
 		WithArgs(1, "name", 100.0, "description").
