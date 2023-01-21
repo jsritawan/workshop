@@ -33,8 +33,8 @@ func (h *handler) UpdatePocket(c *CloudPocket) error {
 		`UPDATE cloudpocket
 		SET
 			name=$2,
-			currency=$3,
-			initial_balance=$4
+			budget=$3,
+			description=$4
 		WHERE id=$1 `,
 	)
 	if err != nil {
@@ -42,9 +42,9 @@ func (h *handler) UpdatePocket(c *CloudPocket) error {
 	}
 
 	var res sql.Result
-	res, err = stmt.Exec(c.ID, c.Name, c.Current, c.Balance)
+	res, err = stmt.Exec(c.ID, c.Name, c.Budget, c.Description)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "cannot update pocket: "+err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, "cannot update pocketss: "+err.Error())
 	}
 
 	row, err := res.RowsAffected()

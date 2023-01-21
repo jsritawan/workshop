@@ -1,0 +1,32 @@
+package cloudpocket
+
+import (
+	"database/sql/driver"
+	"testing"
+
+	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestUpdatePocket(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	defer db.Close()
+	assert.NoError(t, err)
+
+	mock.ExpectPrepare("UPDATE cloudpocket.*").ExpectExec().
+		WithArgs(1, "name", 100.0, "description").
+		WillReturnResult(driver.RowsAffected(1))
+
+	handler := New(db)
+
+	err = handler.UpdatePocket(&CloudPocket{
+		ID:          1,
+		Name:        "name",
+		Budget:      100.0,
+		Description: "description",
+	})
+	assert.NoError(t, err)
+
+	err = mock.ExpectationsWereMet()
+	assert.NoError(t, err)
+}
