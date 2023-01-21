@@ -30,3 +30,23 @@ func TestUpdatePocket(t *testing.T) {
 	err = mock.ExpectationsWereMet()
 	assert.NoError(t, err)
 }
+
+func TestUpdatePocketNotFound(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	defer db.Close()
+	assert.NoError(t, err)
+
+	mock.ExpectPrepare("UPDATE cloudpocket.*").ExpectExec().
+		WithArgs(1, "name", 100.0, "description").
+		WillReturnResult(driver.RowsAffected(0))
+
+	handler := New(db)
+
+	err = handler.UpdatePocket(&CloudPocket{
+		ID:          1,
+		Name:        "name",
+		Budget:      100.0,
+		Description: "description",
+	})
+	assert.Error(t, err)
+}
