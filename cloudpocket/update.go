@@ -10,7 +10,7 @@ import (
 )
 
 func (h *handler) HandleUpdatePocket(c echo.Context) error {
-	var pocket CloudPocket
+	var pocket Model
 	err := c.Bind(&pocket)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
@@ -29,7 +29,7 @@ func (h *handler) HandleUpdatePocket(c echo.Context) error {
 	return c.JSON(http.StatusOK, pocket)
 }
 
-func (h *handler) UpdatePocket(c *CloudPocket) error {
+func (h *handler) UpdatePocket(c *Model) error {
 	stmt, err := h.db.Prepare(
 		`UPDATE cloud_pockets
 		SET

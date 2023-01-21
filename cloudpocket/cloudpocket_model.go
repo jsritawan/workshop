@@ -1,6 +1,6 @@
 package cloudpocket
 
-type CloudPocket struct {
+type Model struct {
 	ID          int64   `json:"id"`
 	Name        string  `json:"name"`
 	Budget      float64 `json:"budget"`

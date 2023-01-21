@@ -19,7 +19,7 @@ func TestUpdatePocket(t *testing.T) {
 
 	handler := New(db)
 
-	err = handler.UpdatePocket(&CloudPocket{
+	err = handler.UpdatePocket(&Model{
 		ID:          1,
 		Name:        "name",
 		Budget:      100.0,
@@ -42,7 +42,7 @@ func TestUpdatePocketNotFound(t *testing.T) {
 
 	handler := New(db)
 
-	err = handler.UpdatePocket(&CloudPocket{
+	err = handler.UpdatePocket(&Model{
 		ID:          1,
 		Name:        "name",
 		Budget:      100.0,
