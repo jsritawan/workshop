@@ -51,3 +51,24 @@ func TestTransferSuccess(t *testing.T) {
 	assert.NoError(t, err)
 
 }
+
+func TestDecimalError(t *testing.T) {
+	t.Run("Add Fund", func(t *testing.T) {
+		var num1 float64 = 0.1
+		var num2 float64 = 0.2
+		var num3 float64 = 0.3
+
+		res := addFund(num1, num2)
+		assert.Equal(t, num3, res)
+	})
+
+	t.Run("Delete Fund", func(t *testing.T) {
+		var num1 float64 = 0.3
+		var num2 float64 = 0.2
+		var num3 float64 = 0.1
+
+		res := deleteFund(num1, num2)
+		assert.Equal(t, num3, res)
+	})
+
+}
