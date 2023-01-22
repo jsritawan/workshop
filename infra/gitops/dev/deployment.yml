@@ -17,7 +17,7 @@ spec:
         - name: secret-docker
       containers:
         - name: gopher-api
-          image: ghcr.io/jsritawan/workshop:f78e455e14fa98213adeea3a8a3738db8da6ddf9
+          image: ghcr.io/jsritawan/workshop:3dc869da90b69a75670d97be6ddb686321196a0e
           imagePullPolicy: Always
           ports:
             - containerPort: 1323
