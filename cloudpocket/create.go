@@ -8,7 +8,7 @@ import (
 
 func (h *handler) HandleCreatePocket(c echo.Context) error {
 	pocket := &Model{}
-	if err := c.Bind(pocket); err != nil {
+	if err := c.Bind(pocket); err != nil || pocket.AccountId == 0 {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
 	}
 

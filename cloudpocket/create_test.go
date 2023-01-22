@@ -33,24 +33,27 @@ func TestCreatePocket(t *testing.T) {
 }
 
 func TestCreatePocketError(t *testing.T) {
-	db, mock, err := sqlmock.New()
-	defer db.Close()
-	assert.NoError(t, err)
+	t.Run("cannot create pocket with accountID 0", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		defer db.Close()
+		assert.NoError(t, err)
 
-	mock.ExpectQuery("INSERT INTO cloud_pockets.*").
-		WithArgs("cloud pocket name", 0.0, 100.0, false, "", "THB", 1).
-		WillReturnError(echo.NewHTTPError(http.StatusInternalServerError, "failed to create cloud pocket"))
+		mock.ExpectQuery("INSERT INTO cloud_pockets.*").
+			WithArgs("cloud pocket name", 0.0, 100.0, false, "", "THB", 0).
+			WillReturnError(echo.NewHTTPError(http.StatusInternalServerError, "failed to create cloud pocket"))
 
-	handler := New(db)
+		handler := New(db)
 
-	err = handler.CreatePocket(&Model{
-		Name:      "cloud pocket name",
-		Balance:   100.0,
-		Current:   "THB",
-		AccountId: 1,
+		err = handler.CreatePocket(&Model{
+			Name:      "cloud pocket name",
+			Balance:   100.0,
+			Current:   "THB",
+			AccountId: 0,
+		})
+		assert.Error(t, err)
+
+		err = mock.ExpectationsWereMet()
+		assert.NoError(t, err)
 	})
-	assert.Error(t, err)
 
-	err = mock.ExpectationsWereMet()
-	assert.NoError(t, err)
 }
