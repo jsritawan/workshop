@@ -23,5 +23,5 @@ func TestRegisterRoute(t *testing.T) {
 
 	rts := e.Routes()
 
-	assert.Equal(t, 6, len(rts))
+	assert.Equal(t, 8, len(rts))
 }

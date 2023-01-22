@@ -20,7 +20,7 @@ func (h *handler) GetCloudpocketByID(c echo.Context) error {
 	}
 
 	row := stmt.QueryRow(id)
-	cp := CloudPocket{}
+	cp := Model{}
 	err = row.Scan(&cp.ID, &cp.Name, &cp.Budget, &cp.Balance, &cp.IsDefault, &cp.Description, &cp.Current, &cp.AccountId)
 
 	switch err {
@@ -44,9 +44,9 @@ func (h *handler) GetCloudpocket(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, Err{Message: "can't query all: " + err.Error()})
 	}
 
-	cps := []CloudPocket{}
+	cps := []Model{}
 	for rows.Next() {
-		cp := CloudPocket{}
+		cp := Model{}
 		err := rows.Scan(&cp.ID, &cp.Name, &cp.Budget, &cp.Balance, &cp.IsDefault, &cp.Description, &cp.Current, &cp.AccountId)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, Err{Message: "can't scan: " + err.Error()})
