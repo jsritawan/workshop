@@ -26,4 +26,5 @@ func New(db *sql.DB) *handler {
 const (
 	cStmtUpdateBalance = "UPDATE cloud_pockets SET balance = $1 WHERE id = $2;"
 	cStmtGetBalance    = "SELECT balance FROM cloud_pockets WHERE id = $1;"
+	cStmtDelete        = "DELETE FROM cloud_pockets WHERE id = $1 RETURNING id;"
 )
