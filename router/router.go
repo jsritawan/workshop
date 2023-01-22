@@ -33,6 +33,9 @@ func RegRoute(cfg config.Config, logger *zap.Logger, db *sql.DB) *echo.Echo {
 	e.POST("/cloud-pockets", hCloudPocket.HandleCreatePocket)
 	e.POST("/cloud-pocket/:id/transfer", hCloudPocket.Transfer)
 
+	hCloudPockets := cloudpocket.New(db)
+	e.GET("/cloud-pockets", hCloudPockets.GetAll)
+
 	hAccount := account.New(cfg.FeatureFlag, db)
 	e.POST("/accounts", hAccount.Create)
 
