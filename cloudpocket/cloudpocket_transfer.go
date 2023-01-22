@@ -38,7 +38,7 @@ func deleteFund(current, newAmount float64) float64 {
 }
 
 func (h handler) Transfer(echo echo.Context) error {
-
+	ctx := echo.Request().Context()
 	req := Res{}
 	id, err := strconv.Atoi(echo.Param("id"))
 
@@ -52,8 +52,14 @@ func (h handler) Transfer(echo echo.Context) error {
 		return echo.JSON(http.StatusBadRequest, "Invalid request body")
 	}
 
+	tx, err := h.db.BeginTx(ctx, nil)
+
+	if err != nil {
+		return echo.JSON(http.StatusInternalServerError, err.Error())
+	}
+
 	var fromBalance float64
-	row := h.db.QueryRow(cStmtGetBalance, id)
+	row := tx.QueryRowContext(ctx, cStmtGetBalance, id)
 	if err := row.Scan(&fromBalance); err != nil {
 		return echo.JSON(http.StatusInternalServerError, "Not found my pocket from id")
 	}
@@ -62,24 +68,27 @@ func (h handler) Transfer(echo echo.Context) error {
 		return echo.JSON(http.StatusInternalServerError, "Not enough balance")
 	}
 
-	stmt, err := h.db.Prepare(cStmtUpdateBalance)
+	stmt, err := h.db.PrepareContext(ctx, cStmtUpdateBalance)
 
 	if err != nil {
 		return echo.JSON(http.StatusInternalServerError, "prepare sql error from id")
 	}
 
-	if _, err := stmt.Exec(deleteFund(fromBalance, req.Amount), id); err != nil {
-		return echo.JSON(http.StatusInternalServerError, "update balance error 1")
+	if _, err := stmt.ExecContext(ctx, deleteFund(fromBalance, req.Amount), id); err != nil {
+		tx.Rollback()
 	}
 
 	var toBalance float64
-	row = h.db.QueryRow(cStmtGetBalance, req.PocketID)
+	row = h.db.QueryRowContext(ctx, cStmtGetBalance, req.PocketID)
 	if err := row.Scan(&toBalance); err != nil {
 		return echo.JSON(http.StatusInternalServerError, "prepare sql error pocket id")
 	}
 
-	if _, err := stmt.Exec(float64((int(toBalance*100)+int(req.Amount*100))/100.00), req.PocketID); err != nil {
-		return echo.JSON(http.StatusInternalServerError, "update balance error 2")
+	if _, err := stmt.ExecContext(ctx, addFund(toBalance, req.Amount), req.PocketID); err != nil {
+		tx.Rollback()
+	}
+	if err = tx.Commit(); err != nil {
+		return echo.JSON(http.StatusInternalServerError, Err{Message: "transaction failed"})
 	}
 
 	return echo.JSON(200, Resp{
