@@ -23,9 +23,5 @@ func TestRegisterRoute(t *testing.T) {
 
 	rts := e.Routes()
 
-<<<<<<< Updated upstream
-	assert.Equal(t, len(rts), 6)
-=======
 	assert.Equal(t, 6, len(rts))
->>>>>>> Stashed changes
 }
