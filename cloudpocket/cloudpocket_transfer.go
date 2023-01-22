@@ -17,6 +17,14 @@ type Res struct {
 	Amount   float64 `json:"amount"`
 }
 
+func addFund(current, newAmount float64) float64 {
+	return current + newAmount
+}
+
+func deleteFund(current, newAmount float64) float64 {
+	return current - newAmount
+}
+
 func (h handler) Transfer(echo echo.Context) error {
 
 	req := Res{}
@@ -48,7 +56,7 @@ func (h handler) Transfer(echo echo.Context) error {
 		return echo.JSON(http.StatusInternalServerError, "prepare sql error from id")
 	}
 
-	if _, err := stmt.Exec(fromBalance-req.Amount, id); err != nil {
+	if _, err := stmt.Exec(deleteFund(fromBalance, req.Amount), id); err != nil {
 		return echo.JSON(http.StatusInternalServerError, "update balance error 1")
 	}
 
@@ -58,7 +66,7 @@ func (h handler) Transfer(echo echo.Context) error {
 		return echo.JSON(http.StatusInternalServerError, "prepare sql error pocket id")
 	}
 
-	if _, err := stmt.Exec(toBalance+req.Amount, req.PocketID); err != nil {
+	if _, err := stmt.Exec(addFund(toBalance, req.Amount), req.PocketID); err != nil {
 		return echo.JSON(http.StatusInternalServerError, "update balance error 2")
 	}
 
