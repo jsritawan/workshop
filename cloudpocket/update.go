@@ -2,7 +2,6 @@ package cloudpocket
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -39,7 +38,6 @@ func (h *handler) UpdatePocket(c *Model) error {
 		WHERE id=$1 `,
 	)
 	if err != nil {
-		fmt.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, "cannot prepare statement")
 	}
 

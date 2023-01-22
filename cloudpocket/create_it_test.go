@@ -3,30 +3,17 @@
 package cloudpocket
 
 import (
-	"database/sql"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
-	"github.com/kkgo-software-engineering/workshop/config"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
 )
 
-func setup(t *testing.T) (*sql.DB, *echo.Echo) {
-	cfg := config.New().All()
-	db, err := sql.Open("postgres", cfg.DBConnection)
-	assert.NoError(t, err)
-
-	hPocket := New(db)
-	e := echo.New()
-	e.POST("/cloud-pockets", hPocket.HandleCreatePocket)
-
-	return db, e
-}
 func TestCreatePocketIT(t *testing.T) {
 	db, e := setup(t)
 	defer db.Close()
@@ -47,9 +34,3 @@ func TestCreatePocketIT(t *testing.T) {
 	assert.Equal(t, int64(1), res.AccountId)
 	assert.Equal(t, http.StatusCreated, rec.Code)
 }
-
-// func TestCreatePocketErrorIT(t *testing.T) {
-// 	db, e := setup(t)
-// 	defer db.Close()
-
-// }
