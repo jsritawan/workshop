@@ -8,7 +8,7 @@ import (
 )
 
 type Err struct {
-	Message string `json:message`
+	Message string `json:"message"`
 }
 
 func (h *handler) GetAll(c echo.Context) error {
