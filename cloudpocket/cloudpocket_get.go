@@ -7,10 +7,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type Err struct {
-	Message string `json:"message"`
-}
-
 func (h *handler) GetCloudpocketByID(c echo.Context) error {
 	id := c.Param("id")
 
