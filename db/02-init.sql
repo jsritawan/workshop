@@ -18,3 +18,7 @@ CREATE TABLE IF NOT EXISTS "accounts" (
   "balance" float8 NOT NULL DEFAULT 0,
   PRIMARY KEY ("id")
 );
+
+INSERT INTO "cloud_pockets"(name,budget,balance,is_default,description, currency,account_id) VALUES 
+('pocket 1',1000.0,2000.0,true,'description','THB',1),
+('pocket 2',1000.0,0.0,false,'description','THB',1);
