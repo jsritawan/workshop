@@ -55,7 +55,7 @@ func (h handler) Transfer(echo echo.Context) error {
 	tx, err := h.db.BeginTx(ctx, nil)
 
 	if err != nil {
-		return echo.JSON(http.StatusInternalServerError, err.Error())
+		return echo.JSON(http.StatusInternalServerError, "Cannot begin transaction")
 	}
 
 	var fromBalance float64

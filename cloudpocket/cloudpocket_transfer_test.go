@@ -91,7 +91,7 @@ func TestTransactionError(t *testing.T) {
 	assert.NoError(t, h.Transfer(c))
 
 	assert.Equal(t, http.StatusInternalServerError, rec.Code)
-	assert.JSONEq(t, `{ "Message": "transaction failed" }`, rec.Body.String())
+	assert.JSONEq(t, `{ "message": "transaction failed" }`, rec.Body.String())
 
 	err = mock.ExpectationsWereMet()
 	assert.NoError(t, err)
