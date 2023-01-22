@@ -15,7 +15,6 @@ import (
 
 // this one probably not necessarily to test, it's really straight forward
 func TestRegisterRoute(t *testing.T) {
-	// t.Skip("TODO: ....")
 	e := RegRoute(config.Config{}, zap.NewNop(), &sql.DB{})
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()
@@ -23,5 +22,5 @@ func TestRegisterRoute(t *testing.T) {
 
 	rts := e.Routes()
 
-	assert.Equal(t, 8, len(rts))
+	assert.Equal(t, 9, len(rts))
 }
