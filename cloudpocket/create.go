@@ -7,7 +7,7 @@ import (
 )
 
 func (h *handler) HandleCreatePocket(c echo.Context) error {
-	pocket := &CloudPocket{}
+	pocket := &Model{}
 	if err := c.Bind(pocket); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid request")
 	}
@@ -20,7 +20,7 @@ func (h *handler) HandleCreatePocket(c echo.Context) error {
 	return c.JSON(http.StatusCreated, pocket)
 }
 
-func (h *handler) CreatePocket(c *CloudPocket) error {
+func (h *handler) CreatePocket(c *Model) error {
 	err := h.db.QueryRow(`INSERT INTO cloud_pockets
 	(name, budget, balance, is_default, description, currency, account_id) 
 	VALUES ($1,$2,$3,$4,$5,$6,$7)

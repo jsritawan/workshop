@@ -20,7 +20,7 @@ func TestCreatePocket(t *testing.T) {
 
 	handler := New(db)
 
-	err = handler.CreatePocket(&CloudPocket{
+	err = handler.CreatePocket(&Model{
 		Name:      "cloud pocket name",
 		Balance:   100.0,
 		Current:   "THB",
@@ -43,7 +43,7 @@ func TestCreatePocketError(t *testing.T) {
 
 	handler := New(db)
 
-	err = handler.CreatePocket(&CloudPocket{
+	err = handler.CreatePocket(&Model{
 		Name:      "cloud pocket name",
 		Balance:   100.0,
 		Current:   "THB",
