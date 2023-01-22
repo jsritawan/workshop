@@ -1,10 +1,12 @@
 package cloudpocket
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"github.com/shopspring/decimal"
 )
 
 type Resp struct {
@@ -18,11 +20,21 @@ type Res struct {
 }
 
 func addFund(current, newAmount float64) float64 {
-	return current + newAmount
+	var a = decimal.NewFromFloat(current).Add(decimal.NewFromFloat(newAmount))
+	num, err := a.Float64()
+	if err != true {
+		fmt.Println(err)
+	}
+	return num
 }
 
 func deleteFund(current, newAmount float64) float64 {
-	return current - newAmount
+	var a = decimal.NewFromFloat(current).Sub(decimal.NewFromFloat(newAmount))
+	num, err := a.Float64()
+	if err != true {
+		fmt.Println(err)
+	}
+	return num
 }
 
 func (h handler) Transfer(echo echo.Context) error {
@@ -66,12 +78,12 @@ func (h handler) Transfer(echo echo.Context) error {
 		return echo.JSON(http.StatusInternalServerError, "prepare sql error pocket id")
 	}
 
-	if _, err := stmt.Exec(addFund(toBalance, req.Amount), req.PocketID); err != nil {
+	if _, err := stmt.Exec(float64((int(toBalance*100)+int(req.Amount*100))/100.00), req.PocketID); err != nil {
 		return echo.JSON(http.StatusInternalServerError, "update balance error 2")
 	}
 
 	return echo.JSON(200, Resp{
 		PocketID: req.PocketID,
-		Balance:  toBalance + req.Amount,
+		Balance:  addFund(toBalance, req.Amount),
 	})
 }
