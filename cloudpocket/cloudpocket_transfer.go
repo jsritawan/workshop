@@ -78,7 +78,7 @@ func (h handler) Transfer(echo echo.Context) error {
 		return echo.JSON(http.StatusInternalServerError, "prepare sql error pocket id")
 	}
 
-	if _, err := stmt.Exec(float64((int(toBalance*100)+int(req.Amount*100))/100.00), req.PocketID); err != nil {
+	if _, err := stmt.Exec(addFund(toBalance, req.Amount), req.PocketID); err != nil {
 		return echo.JSON(http.StatusInternalServerError, "update balance error 2")
 	}
 
