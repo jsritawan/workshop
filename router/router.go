@@ -31,16 +31,14 @@ func RegRoute(cfg config.Config, logger *zap.Logger, db *sql.DB) *echo.Echo {
 	hCloudPocket := cloudpocket.New(db)
 	e.PUT("/cloud-pockets/:id", hCloudPocket.HandleUpdatePocket)
 	e.POST("/cloud-pocket/:id/transfer", hCloudPocket.Transfer)
+	e.GET("/cloud-pockets/:id", hCloudPocket.GetCloudpocketByID)
+	e.GET("/cloud-pockets", hCloudPocket.GetCloudpocket)
 
 	hAccount := account.New(cfg.FeatureFlag, db)
 	e.POST("/accounts", hAccount.Create)
 
 	hFeatFlag := featflag.New(cfg)
 	e.GET("/features", hFeatFlag.List)
-
-	cp := cloudpocket.New(db)
-	e.GET("/cloud-pockets/:id", cp.GetCloudpocketByID)
-	e.GET("/cloud-pockets", cp.GetCloudpocket)
 
 	return e
 }
